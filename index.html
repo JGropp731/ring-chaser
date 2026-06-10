@@ -682,6 +682,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--f0);-webkit-font-s
 
 /* court */
 .court{position:relative;width:100%;aspect-ratio:1/1.18;background:linear-gradient(180deg,#0B1330,#0D1740);border:1px solid var(--line);border-radius:var(--rad);overflow:hidden}
+.cxnleg{text-align:center;color:var(--dim);font-size:11px;font-weight:700;margin-top:8px}
 .zone{position:absolute;left:0;right:0;text-align:center;color:#22305c;font-weight:900;font-size:12px;letter-spacing:3px}
 .zone.t{top:14px}.zone.b{bottom:14px}
 .slot{position:absolute;transform:translate(-50%,-50%);width:108px;min-height:54px;border-radius:14px;border:2px dashed #283561;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:8px}
@@ -719,7 +720,8 @@ body{background:var(--bg);color:var(--text);font-family:var(--f0);-webkit-font-s
 <body>
 <div class="bar">
   <div class="l"><div class="logo">RC</div><div class="round">Round <b id="roundLbl">1</b>/5</div></div>
-  <div class="r"><span id="modeLbl">FREE PLAY</span>
+  <div class="r"><span style="opacity:.45;font-weight:800">v6</span>
+    <button class="ico" id="lbTop" title="Leaderboard">🏆</button>
     <button class="ico" id="restartBtn" title="Restart">↻</button>
     <button class="ico" id="helpBtn" title="How to play">?</button>
   </div>
@@ -751,8 +753,8 @@ body{background:var(--bg);color:var(--text);font-family:var(--f0);-webkit-font-s
         <span class="pill team" id="pTeam">—</span>
         <span class="pill year" id="pYear">—</span>
         <span class="sp"></span>
-        <button class="rr team" id="rrTeam">↻ Team</button>
-        <button class="rr year" id="rrYear">↻ Year</button>
+        <button class="rr team" id="rrTeam">↻ Team <b id="rrTeamN">1</b></button>
+        <button class="rr year" id="rrYear">↻ Year <b id="rrYearN">1</b></button>
       </div>
       <div class="note hidden" id="noFit"><span>⚠️ No player fits your open spots.</span><button class="btn ghost" id="forceRoll" style="padding:8px 16px">Re-roll free</button></div>
       <div class="filters">
@@ -775,6 +777,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--f0);-webkit-font-s
       <div class="csub" id="rSub"></div>
       <span class="pill year chemwin" id="rChem">⚡ Chemistry: +0 wins</span>
       <div id="rList"></div>
+      <div id="rCxn"></div>
       <div id="submitBlock" style="margin-top:14px;display:flex;gap:8px">
         <input id="lbName" placeholder="Sleeper username" style="flex:1;background:var(--panel);border:1px solid var(--line);color:var(--text);border-radius:var(--pill);padding:12px 16px;font-size:16px;font-family:var(--f0)"/>
         <button class="btn primary" id="submitScore" style="padding:12px 22px">Submit</button>
@@ -788,24 +791,27 @@ body{background:var(--bg);color:var(--text);font-family:var(--f0);-webkit-font-s
   <!-- RIGHT: court -->
   <aside>
     <div class="court">
-      <div class="zone t">FRONTCOURT</div><div class="zone b">BACKCOURT</div>
       <svg viewBox="0 0 400 470" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%">
         <rect x="3" y="3" width="394" height="464" fill="none" stroke="#1B2748" stroke-width="2" rx="8"/>
-        <rect x="150" y="3" width="100" height="150" fill="none" stroke="#1B2748" stroke-width="2"/>
-        <circle cx="200" cy="153" r="40" fill="none" stroke="#1B2748" stroke-width="2"/>
-        <path d="M70 3 a150 150 0 0 0 260 0" fill="none" stroke="#1B2748" stroke-width="2"/>
-        <line x1="3" y1="400" x2="397" y2="400" stroke="#1B2748" stroke-width="1.5" stroke-dasharray="6 9"/>
+        <line x1="44" y1="40" x2="356" y2="40" stroke="#1B2748" stroke-width="3"/>
+        <rect x="172" y="40" width="56" height="12" rx="2" fill="none" stroke="#1B2748" stroke-width="2"/>
+        <circle cx="200" cy="60" r="7" fill="none" stroke="#1B2748" stroke-width="2"/>
+        <rect x="150" y="52" width="100" height="150" fill="none" stroke="#1B2748" stroke-width="2"/>
+        <circle cx="200" cy="202" r="40" fill="none" stroke="#1B2748" stroke-width="2"/>
+        <path d="M44 52 v36 a156 156 0 0 0 312 0 v-36" fill="none" stroke="#1B2748" stroke-width="2"/>
       </svg>
+      <svg id="cxn" viewBox="0 0 100 100" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none"></svg>
       <div id="court"></div>
     </div>
+    <div class="cxnleg"><span style="color:var(--brand)">━</span> teammates &nbsp; <span style="color:#7C5CFF">╌</span> college</div>
   </aside>
 </div></div>
 
 <!-- intro -->
 <div class="ov" id="intro"><div class="box">
   <h1>Ring<span>Chaser</span></h1>
-  <p>Build an all-time NBA starting five from random rolls. <b style="color:var(--text)">Daily</b> = one shared challenge per day. <b style="color:var(--text)">Free Play</b> = unlimited practice.</p>
-  <div class="modes"><button class="btn primary" id="dailyBtn">📅 Daily</button><button class="btn ghost" id="freeBtn">🎲 Free Play</button></div>
+  <p>Build an all-time NBA starting five from random rolls — one player per spot (PG–C) — and chase chemistry from shared colleges and real teammates.</p>
+  <button class="btn primary" id="playBtn" style="width:100%;padding:16px">🎲 Play</button>
   <button class="btn ghost" id="lbBtn" style="width:100%;margin-top:10px">🏆 Leaderboard</button>
   <div class="htl" id="bestLine"></div>
 </div></div>
@@ -816,9 +822,10 @@ body{background:var(--bg);color:var(--text);font-family:var(--f0);-webkit-font-s
   <ul class="htl">
     <li>🎲 Each round, <b style="color:var(--text)">Roll</b> a random franchise + season.</li>
     <li>You must fill five positions: <b style="color:var(--text)">PG, SG, SF, PF, C</b>. You can only draft a player whose spot is still open — so a roll full of guards is useless once both guard slots are filled. That's the challenge.</li>
-    <li>↻ One <b>Team</b> re-roll and one <b>Year</b> re-roll per round.</li>
-    <li>⚡ <b style="color:var(--brand)">Chemistry:</b> same college = +3, real teammates = +5 — and it converts straight into extra wins.</li>
-    <li>Your five become Team Power → a record out of 82. Going 82-0 takes elite players <i>and</i> stacked chemistry.</li>
+    <li>↻ You get <b>one Team re-roll and one Year re-roll for the entire game</b> — spend them wisely.</li>
+    <li>⭐ <b style="color:var(--text)">OVR</b> rates each player on ALL stats — points, rebounds, assists, steals AND blocks. A defender or playmaker can rate high without scoring.</li>
+    <li>⚡ <b style="color:var(--brand)">Chemistry</b> is separate from OVR: two players link if they share a <b>college</b> (+3) or were real <b>NBA teammates</b> (+5). Links draw on the court — solid = teammates, dashed = college — and add wins.</li>
+    <li>Your five become a record out of 82. Going 82-0 takes elite OVR <i>and</i> stacked chemistry.</li>
   </ul>
   <div class="modes"><button class="btn primary" id="howClose">Got it</button></div>
 </div></div>
@@ -833,7 +840,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--f0);-webkit-font-s
 
 <script>
 const DATA=window.RC_DATA||[];
-const SLOTS=[{pos:'PG',need:'G',x:36,y:88},{pos:'SG',need:'G',x:80,y:74},{pos:'SF',need:'F',x:18,y:46},{pos:'PF',need:'F',x:78,y:40},{pos:'C',need:'C',x:50,y:20}];
+const SLOTS=[{pos:'PG',need:'G',x:50,y:74},{pos:'SG',need:'G',x:82,y:50},{pos:'SF',need:'F',x:18,y:50},{pos:'PF',need:'F',x:64,y:24},{pos:'C',need:'C',x:36,y:24}];
 const $=id=>document.getElementById(id);
 const seasonStr=y=>(y-1)+'–'+y;
 function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
@@ -847,6 +854,7 @@ const pickEntry=()=>{const a=availEntries();return a[rnd(a.length)];};
 const teamsWith=t=>DATA.filter(d=>d[0]===t);
 const mk=(r,t,y)=>({name:r[0],group:r[1],college:r[2],ppg:r[3],rpg:r[4],apg:r[5],spg:r[6],bpg:r[7],teams:r[8].split(','),_team:t,_year:y});
 const value=p=>p.ppg+1.2*p.rpg+1.5*p.apg+3*p.spg+3*p.bpg;
+const ovr=p=>Math.min(99,Math.round(40+value(p)));
 const filledCount=()=>S.picks.filter(Boolean).length;
 const openForGroup=g=>{for(let i=0;i<5;i++)if(!S.picks[i]&&SLOTS[i].need===g)return i;return -1;};
 const eligible=p=>openForGroup(p.group)!==-1;
@@ -875,7 +883,7 @@ function setCur(e){
   $('pTeam').textContent=S.cur.name;$('pYear').textContent=seasonStr(S.cur.year);
   S.group='ALL';S.query='';$('search').value='';
   $('tabs').querySelectorAll('.tab').forEach(t=>t.classList.toggle('on',t.dataset.g==='ALL'));
-  $('rrTeam').disabled=S.rrTeam<=0;$('rrYear').disabled=S.rrYear<=0;
+  updateRR();
   renderList();renderCourt();
 }
 function rerollTeam(){if(S.rrTeam<=0)return;S.rrTeam--;let e=pickEntry(),n=0;while(e[0]===S.cur.team&&n++<40)e=pickEntry();const sy=DATA.find(d=>d[0]===e[0]&&d[1]===S.cur.year);land(sy||e);setCur(sy||e);}
@@ -898,32 +906,32 @@ function renderList(){
   $('avail').textContent=`${S.cur.players.filter(p=>!S.usedNames.has(p.name)).length} players available`;
   if(!ps.length){$('list').innerHTML='<div class="avail" style="padding:30px;text-align:center">No players match.</div>';return;}
   $('list').innerHTML=ps.map((p,i)=>{
-    const el=eligible(p),chem=el&&candidateChem(p);
+    const el=eligible(p);const partners=el?S.picks.filter(Boolean).filter(q=>pairChem(p,q).bonus>0).map(q=>q.name.split(' ').pop()):[];const chem=partners.length>0;
     return `<div class="row ${el?'':'dis'} ${chem?'chem':''}" data-i="${i}">
       <div class="who"><div class="n">${chem?'<span class="bolt">⚡</span>':''}${p.name}</div>
-        <div class="sub"><span class="pos ${p.group}">${p.group}</span> ${p._team} · ${seasonStr(p._year)}${!el?' · <span style="color:var(--orange)">spot filled</span>':''}</div></div>
+        <div class="sub"><span class="pos ${p.group}">${p.group}</span> ${p._team} · ${seasonStr(p._year)}${partners.length?' · <span style="color:var(--brand)">⚡ '+partners.join(', ')+'</span>':''}${!el?' · <span style="color:var(--orange)">spot filled</span>':''}</div></div>
       <div class="st">${p.ppg.toFixed(1)}<small>PTS</small></div>
       <div class="st">${p.rpg.toFixed(1)}<small>REB</small></div>
       <div class="st">${p.apg.toFixed(1)}<small>AST</small></div>
       <div class="st">${p.spg.toFixed(1)}<small>STL</small></div>
       <div class="st">${p.bpg.toFixed(1)}<small>BLK</small></div>
-      <div class="st p">${Math.round(value(p))}<small>OVR</small></div></div>`;}).join('');
+      <div class="st p">${ovr(p)}<small>OVR</small></div></div>`;}).join('');
   $('list').querySelectorAll('.row').forEach(el=>el.onclick=()=>{const p=ps[+el.dataset.i];if(eligible(p))draft(p);});
 }
 
 // ---- court ----
+function updateRR(){$('rrTeamN').textContent=S.rrTeam;$('rrYearN').textContent=S.rrYear;$('rrTeam').disabled=S.rrTeam<=0;$('rrYear').disabled=S.rrYear<=0;}
 function renderCourt(){
-  const chem=totalChem(S.picks.filter(Boolean));const lk=new Set();chem.links.forEach(l=>{lk.add(l.i);lk.add(l.j);});
-  // map chem link indices (over filled list) back to slot positions
+  const fp=S.picks.filter(Boolean);
+  const chem=totalChem(fp);
   const filled=S.picks.map((p,i)=>p?i:-1).filter(i=>i>=0);
   const slotChem=new Set();chem.links.forEach(l=>{slotChem.add(filled[l.i]);slotChem.add(filled[l.j]);});
-  const openGroups=new Set();S.picks.forEach((p,i)=>{if(!p)openGroups.add(SLOTS[i].need);});
+  $('cxn').innerHTML=chem.links.map(l=>{const a=SLOTS[filled[l.i]],b=SLOTS[filled[l.j]];const tm=l.why.some(w=>w.indexOf('🤝')>=0);return '<line x1="'+a.x+'" y1="'+a.y+'" x2="'+b.x+'" y2="'+b.y+'" stroke="'+(tm?'#34F5C5':'#7C5CFF')+'" stroke-width="'+(tm?1.1:1)+'" '+(tm?'':'stroke-dasharray="2.5 2.5"')+' opacity="0.85"/>';}).join('');
   $('court').innerHTML=SLOTS.map((s,i)=>{
     const p=S.picks[i];
-    if(p)return `<div class="slot filled ${slotChem.has(i)?'chem':''}" style="left:${s.x}%;top:${s.y}%">
-      <div class="pn">${slotChem.has(i)?'<span class="bolt">⚡</span>':''}${p.name.split(' ').slice(-1)[0]}</div><div class="pp">OVR ${Math.round(value(p))}</div></div>`;
+    if(p)return '<div class="slot filled '+(slotChem.has(i)?'chem':'')+'" style="left:'+s.x+'%;top:'+s.y+'%"><div class="pn">'+(slotChem.has(i)?'<span class="bolt">⚡</span>':'')+p.name.split(' ').slice(-1)[0]+'</div><div class="pp">OVR '+ovr(p)+'</div></div>';
     const isOpen=S.cur?S.cur.players.filter(x=>!S.usedNames.has(x.name)).some(x=>x.group===s.need&&eligible(x)):false;
-    return `<div class="slot ${isOpen?'open':''}" style="left:${s.x}%;top:${s.y}%"><div class="pl">${s.pos}</div></div>`;
+    return '<div class="slot '+(isOpen?'open':'')+'" style="left:'+s.x+'%;top:'+s.y+'%"><div class="pl">'+s.pos+'</div></div>';
   }).join('');
 }
 
@@ -932,7 +940,7 @@ function draft(p){
   const i=openForGroup(p.group);if(i<0)return;
   S.picks[i]=p;S.usedFr.add(p._team);S.usedNames.add(p.name);
   if(filledCount()>=5){renderCourt();finish();return;}
-  S.rrTeam=1;S.rrYear=1;S.cur=null;
+  S.cur=null;
   $('draftView').classList.add('hidden');$('preRoll').classList.remove('hidden');
   $('titleBlock').classList.add('hidden');$('reels').classList.add('hidden');$('rollcards').classList.remove('hidden');
   $('reelT').textContent='?';$('reelY').textContent='?';
@@ -940,7 +948,7 @@ function draft(p){
   renderCourt();
 }
 
-const wins=pw=>{const w=Math.round((pw-110)/(322-110)*82);return Math.max(3,Math.min(82,w));};
+const wins=pw=>{const w=Math.round((pw-22)/(329-22)*82);return Math.max(3,Math.min(82,w));};
 function gradeFor(w){
   if(w>=72)return['S','#34F5C5','RINGS · UNDEFEATED ENERGY'];
   if(w>=62)return['A','#34F5C5','TITLE CONTENDER'];
@@ -955,18 +963,19 @@ function finish(){
   const[g,col,desc]=gradeFor(w);
   $('rW').textContent=w;$('rL').textContent=l;$('rDot').textContent=g;$('rDot').style.color=col;$('rDot').style.borderColor=col;
   $('rDesc').textContent=desc;$('rDesc').style.color=col;
-  $('rSub').textContent=`${(ps.reduce((a,p)=>a+p.ppg,0)/5).toFixed(1)} avg PPG · ${Math.round(base+chem.bonus)} team power`;
+  const avgOvr=Math.round(ps.reduce((a,p)=>a+ovr(p),0)/5);
+  $('rSub').textContent='Avg OVR '+avgOvr+' · '+chem.links.length+' chemistry link'+(chem.links.length===1?'':'s');
+  $('rCxn').innerHTML=chem.links.length?('<div class="csub" style="margin:14px 0 6px;color:var(--brand)">⚡ Why this team has chemistry</div>'+chem.links.map(l=>'<div class="rrow" style="grid-template-columns:1fr;padding:8px 14px"><div class="sub" style="font-size:13px"><b style="color:var(--text)">'+ps[l.i].name.split(' ').pop()+' ⟷ '+ps[l.j].name.split(' ').pop()+'</b>  ·  '+l.why.join('   ')+'</div></div>').join('')):'';
   $('rChem').textContent=`⚡ Chemistry: +${cw} win${cw===1?'':'s'}`;
   const lk=new Set();chem.links.forEach(x=>{lk.add(x.i);lk.add(x.j);});
   $('rList').innerHTML=ps.map((p,i)=>`<div class="rrow ${lk.has(i)?'chem':''}">
     <div class="who"><div class="n">${lk.has(i)?'<span class="bolt">⚡</span>':''}${p.name}</div>
       <div class="sub"><span class="pos ${p.group}">${SLOTS[i].pos}</span> ${p._team} · ${seasonStr(p._year)}</div></div>
-    <div class="st">${p.ppg.toFixed(1)}</div><div class="st">${p.rpg.toFixed(1)}</div><div class="st p">${Math.round(value(p))}</div></div>`).join('');
+    <div class="st">${p.ppg.toFixed(1)}</div><div class="st">${p.rpg.toFixed(1)}</div><div class="st p">${ovr(p)}</div></div>`).join('');
   $('draftView').classList.add('hidden');$('preRoll').classList.add('hidden');$('resultView').classList.remove('hidden');
   try{const b=+(localStorage.getItem('rc_best')||0);if(w>b)localStorage.setItem('rc_best',w);}catch(e){}
-  S._share=`🏀 RingChaser ${S.mode==='daily'?'Daily ':''}— my all-time five went ${w}-${l} (${g})\n${ps.map(p=>p.name).join(', ')}\nringchaser.sleeper.com`;
+  S._share=`🏀 RingChaser — my all-time five went ${w}-${l} (${g})\n${ps.map(p=>p.name).join(', ')}\nringchaser.sleeper.com`;
   S._wins=w;
-  if(S.mode==='daily'){try{localStorage.setItem('rc_daily_'+todayKey(),JSON.stringify({w}));}catch(_){}}
   $('lbName').disabled=false;$('submitScore').disabled=false;$('submitScore').textContent='Submit';
 }
 function bestStr(){try{const b=+(localStorage.getItem('rc_best')||0);return b?`Your best: <b style="color:var(--brand)">${b}-${82-b}</b>`:'';}catch(e){return'';}}
@@ -977,26 +986,23 @@ function lbGet(){try{return JSON.parse(localStorage.getItem('rc_lb')||'[]');}cat
 function lbAdd(e){const a=lbGet();a.push(e);a.sort((x,y)=>y.w-x.w);try{localStorage.setItem('rc_lb',JSON.stringify(a.slice(0,200)));}catch(_){}}
 function renderLB(hl){
   const a=lbGet();
-  $('lbList').innerHTML=a.length?a.slice(0,30).map((e,i)=>'<div class="rrow '+(e.name===hl?'chem':'')+'" style="grid-template-columns:34px 1fr auto"><div class="st p">'+(i+1)+'</div><div class="who"><div class="n">'+e.name+'</div><div class="sub">'+(e.mode==='daily'?'📅 Daily':'🎲 Free')+' · '+e.date+'</div></div><div class="st p">'+e.w+'-'+(82-e.w)+'</div></div>').join(''):'<div class="csub">No scores yet — be the first!</div>';
+  $('lbList').innerHTML=a.length?a.slice(0,30).map((e,i)=>'<div class="rrow '+(e.name===hl?'chem':'')+'" style="grid-template-columns:34px 1fr auto"><div class="st p">'+(i+1)+'</div><div class="who"><div class="n">'+e.name+'</div><div class="sub">'+e.date+'</div></div><div class="st p">'+e.w+'-'+(82-e.w)+'</div></div>').join(''):'<div class="csub">No scores yet — be the first!</div>';
   $('lbFoot').innerHTML=LEADERBOARD_API?'':'Local leaderboard — saved on this device. A global board needs a backend.';
 }
 function openLB(msg,hl){$('lbMsg').textContent=msg||'';renderLB(hl);$('lbOv').classList.remove('hidden');}
 function showDailyDone(d){openLB("You already played today's Daily: "+d.w+"-"+(82-d.w)+". Come back tomorrow for a new challenge!",null);}
 
-function start(mode){
-  if(mode==='daily'){const done=localStorage.getItem('rc_daily_'+todayKey());if(done){$('intro').classList.add('hidden');showDailyDone(JSON.parse(done));return;}}
-  S.mode=mode;S.picks=[null,null,null,null,null];S.cur=null;S.rrTeam=1;S.rrYear=1;
+function start(){
+  S.mode='solo';S.picks=[null,null,null,null,null];S.cur=null;S.rrTeam=1;S.rrYear=1;
   S.usedFr=new Set();S.usedNames=new Set();S.group='ALL';S.query='';
-  S.rng=mode==='daily'?mulberry32(new Date().getFullYear()*1e4+(new Date().getMonth()+1)*100+new Date().getDate()):Math.random;
-  $('modeLbl').textContent=mode==='daily'?'DAILY':'FREE PLAY';
+  S.rng=Math.random;
   $('intro').classList.add('hidden');$('resultView').classList.add('hidden');$('draftView').classList.add('hidden');
   $('preRoll').classList.remove('hidden');$('titleBlock').classList.remove('hidden');
   $('reels').classList.add('hidden');$('rollcards').classList.remove('hidden');
   $('reelT').textContent='?';$('reelY').textContent='?';$('roundLbl').textContent='1';
   $('rollBtn').disabled=false;renderCourt();
 }
-$('dailyBtn').onclick=()=>start('daily');
-$('freeBtn').onclick=()=>start('free');
+$('playBtn').onclick=()=>start();
 $('againBtn').onclick=()=>{$('intro').classList.remove('hidden');$('bestLine').innerHTML=bestStr();};
 $('restartBtn').onclick=()=>{$('intro').classList.remove('hidden');$('bestLine').innerHTML=bestStr();};
 $('rollBtn').onclick=roll;
@@ -1009,6 +1015,7 @@ document.querySelectorAll('.head .st').forEach(h=>h.onclick=()=>{S.sort=h.datase
 $('helpBtn').onclick=()=>$('howOv').classList.remove('hidden');
 $('howClose').onclick=()=>$('howOv').classList.add('hidden');
 $('lbBtn').onclick=()=>openLB('',null);
+$('lbTop').onclick=()=>openLB('',null);
 $('viewLbBtn').onclick=()=>openLB('',null);
 $('lbClose').onclick=()=>$('lbOv').classList.add('hidden');
 $('submitScore').onclick=()=>{const n=$('lbName').value.trim();if(!n){$('lbName').focus();return;}lbAdd({name:n,w:S._wins,date:todayKey(),mode:S.mode});$('submitScore').textContent='Submitted ✓';$('submitScore').disabled=true;$('lbName').disabled=true;openLB('Nice - you are on the board!',n);};
