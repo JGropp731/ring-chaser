@@ -720,12 +720,19 @@ body{background:var(--bg);color:var(--text);font-family:var(--f0);-webkit-font-s
 .hidden{display:none!important}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 @media(max-width:900px){.title{font-size:34px}.court{aspect-ratio:1/1}}
+@media(max-width:600px){
+  .row,.head{grid-template-columns:1fr 32px 32px 32px 44px;gap:5px;padding-left:12px;padding-right:12px}
+  .row>div:nth-child(5),.row>div:nth-child(6),.head>div:nth-child(5),.head>div:nth-child(6){display:none}
+  .row{padding-top:11px;padding-bottom:11px}
+  .st{font-size:14px}.st small{font-size:8px}
+  .who .n{font-size:14px}.who .sub{font-size:10px}
+}
 </style>
 </head>
 <body>
 <div class="bar">
   <div class="l"><div class="logo">RC</div><div class="round">Round <b id="roundLbl">1</b>/5</div></div>
-  <div class="r"><span style="opacity:.45;font-weight:800">v12</span>
+  <div class="r"><span style="opacity:.45;font-weight:800">v13</span>
     <button class="ico lbtop" id="lbTop" title="Leaderboard">🏆 Board</button>
     <button class="ico" id="restartBtn" title="Restart">↻</button>
     <button class="ico" id="helpBtn" title="How to play">?</button>
@@ -1022,8 +1029,8 @@ function start(){
   $('rollBtn').disabled=false;renderCourt();
 }
 $('playBtn').onclick=()=>start();
-$('againBtn').onclick=()=>{$('intro').classList.remove('hidden');$('bestLine').innerHTML=bestStr();introLb();};
-$('restartBtn').onclick=()=>{$('intro').classList.remove('hidden');$('bestLine').innerHTML=bestStr();introLb();};
+$('againBtn').onclick=()=>start();
+$('restartBtn').onclick=()=>start();
 $('rollBtn').onclick=roll;
 $('rrTeam').onclick=rerollTeam;$('rrYear').onclick=rerollYear;$('forceRoll').onclick=forceRoll;
 $('tabs').querySelectorAll('.tab').forEach(t=>t.onclick=()=>{S.group=t.dataset.g;$('tabs').querySelectorAll('.tab').forEach(x=>x.classList.toggle('on',x===t));renderList();});
@@ -1039,6 +1046,7 @@ $('lbClose').onclick=()=>$('lbOv').classList.add('hidden');
 $('submitScore').onclick=()=>{const n=$('lbName').value.trim();if(!n){$('lbName').focus();return;}lbAdd({name:n,w:S._wins,date:todayKey(),mode:S.mode});$('submitScore').textContent='Submitted ✓';$('submitScore').disabled=true;$('lbName').disabled=true;openLB('Nice - you are on the board!',n);};
 $('bestLine').innerHTML=bestStr();introLb();
 renderCourt();
+start();
 </script>
 </body>
 </html>
