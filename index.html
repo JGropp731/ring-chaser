@@ -1555,7 +1555,7 @@ html,body{overflow-x:hidden;max-width:100%}
 <body>
 <div class="bar">
   <div class="l"><div class="logo">RC</div><div class="round">Round <b id="roundLbl">1</b>/5</div></div>
-  <div class="r"><span class="poweredby">POWERED BY <span class="swm"></span></span><span class="ver" style="opacity:.45;font-weight:800">v41</span>
+  <div class="r"><span class="poweredby">POWERED BY <span class="swm"></span></span><span class="ver" style="opacity:.45;font-weight:800">v42</span>
     <button class="ico lbtop" id="lbTop" title="Leaderboard">🏆<span class="lbword"> Board</span></button>
     <button class="ico" id="statsBtn" title="Your stats">📊</button>
     <button class="ico" id="restartBtn" title="Restart">↻</button>
@@ -1855,18 +1855,18 @@ function openStats(){let H=[];try{H=JSON.parse(localStorage.getItem('rc_hist')||
  const tp=top(pc),pmax=tp.length?tp[0][1]:1;const players='<div class="ssec">Most-drafted players</div>'+tp.map(e=>'<div class="sbar"><span class="snm">'+e[0]+'</span><span class="strack"><span class="sfill" style="width:'+Math.round(100*e[1]/pmax)+'%"></span></span><span class="sn">'+e[1]+'</span></div>').join('');
  const tt=top(tc),tmax2=tt.length?tt[0][1]:1;const teams='<div class="ssec">Most-drafted teams</div>'+tt.map(e=>'<div class="sbar"><span class="snm">'+e[0]+'</span><span class="strack"><span class="sfill" style="width:'+Math.round(100*e[1]/tmax2)+'%;background:var(--orange)"></span></span><span class="sn">'+e[1]+'</span></div>').join('');
  el.innerHTML=tiles+grades+players+teams;$('statsOv').classList.remove('hidden');}
-function introLb(){const a=lbGet();if(!a.length){$('introLb').innerHTML='<div class="csub" style="font-size:12px;margin:0">🏆 No scores yet — play and submit to start the board.</div>';return;}$('introLb').innerHTML='<div class="csub" style="margin:0 0 8px;color:var(--brand);font-weight:800">🏆 Top Scores</div>'+a.slice(0,5).map((e,i)=>'<div class="rrow" style="grid-template-columns:26px 1fr auto;padding:9px 12px;margin-bottom:5px"><div class="st p">'+(i+1)+'</div><div class="who"><div class="n" style="font-size:14px">'+e.name+'</div></div><div class="st p">'+e.w+'-'+(82-e.w)+'</div></div>').join('');}
+async function introLb(){if(!$('introLb'))return;const a=await fetchLB();if(!a.length){$('introLb').innerHTML='<div class="csub" style="font-size:12px;margin:0">🏆 No scores yet — play and submit to start the board.</div>';return;}$('introLb').innerHTML='<div class="csub" style="margin:0 0 8px;color:var(--brand);font-weight:800">🏆 Top Scores</div>'+a.slice(0,5).map((e,i)=>'<div class="rrow" style="grid-template-columns:26px 1fr auto;padding:9px 12px;margin-bottom:5px"><div class="st p">'+(i+1)+'</div><div class="who"><div class="n" style="font-size:14px">'+e.name+'</div></div><div class="st p">'+e.w+'-'+(82-e.w)+'</div></div>').join('');}
 
-const LEADERBOARD_API=""; // set to a backend URL to make the leaderboard global
+const LEADERBOARD_API="https://ringchaser-stats.jordan-237.workers.dev"; // global leaderboard via worker
 const todayKey=()=>new Date().toISOString().slice(0,10);
 function lbGet(){try{return JSON.parse(localStorage.getItem('rc_lb')||'[]');}catch(e){return[];}}
-function lbAdd(e){const a=lbGet();a.push(e);a.sort((x,y)=>y.w-x.w);try{localStorage.setItem('rc_lb',JSON.stringify(a.slice(0,200)));}catch(_){}}
-function renderLB(hl){
-  const a=lbGet();
-  $('lbList').innerHTML=a.length?a.slice(0,30).map((e,i)=>'<div class="rrow '+(e.name===hl?'chem':'')+'" style="grid-template-columns:34px 1fr auto"><div class="st p">'+(i+1)+'</div><div class="who"><div class="n">'+e.name+'</div><div class="sub">'+e.date+'</div></div><div class="st p">'+e.w+'-'+(82-e.w)+'</div></div>').join(''):'<div class="csub">No scores yet — be the first!</div>';
-  $('lbFoot').innerHTML='';
+async function fetchLB(){if(LEADERBOARD_API){try{const r=await fetch(LEADERBOARD_API+'/lb',{cache:'no-store'});const j=await r.json();return (j.top||[]).map(e=>({name:e.n,w:e.w,date:e.d}));}catch(_){}}return lbGet();}
+async function lbAdd(name,w){if(LEADERBOARD_API){try{await fetch(LEADERBOARD_API+'/lbadd?n='+encodeURIComponent(name)+'&w='+w,{cache:'no-store'});return;}catch(_){}}const a=lbGet();a.push({name:name,w:w,date:todayKey()});a.sort((x,y)=>y.w-x.w);try{localStorage.setItem('rc_lb',JSON.stringify(a.slice(0,200)));}catch(_){}}
+function renderLB(a,hl){
+  $('lbList').innerHTML=a.length?a.slice(0,30).map((e,i)=>'<div class="rrow '+(e.name===hl?'chem':'')+'" style="grid-template-columns:34px 1fr auto"><div class="st p">'+(i+1)+'</div><div class="who"><div class="n">'+e.name+'</div><div class="sub">'+(e.date||'')+'</div></div><div class="st p">'+e.w+'-'+(82-e.w)+'</div></div>').join(''):'<div class="csub">No scores yet — be the first!</div>';
+  $('lbFoot').innerHTML=LEADERBOARD_API?'Global leaderboard · top 50':'';
 }
-function openLB(msg,hl){$('lbMsg').textContent=msg||'';renderLB(hl);$('lbOv').classList.remove('hidden');}
+async function openLB(msg,hl){$('lbMsg').textContent=msg||'';$('lbList').innerHTML='<div class="csub">Loading…</div>';$('lbOv').classList.remove('hidden');const a=await fetchLB();renderLB(a,hl);}
 function showDailyDone(d){openLB("You already played today's Daily: "+d.w+"-"+(82-d.w)+". Come back tomorrow for a new challenge!",null);}
 
 function start(){
@@ -1896,7 +1896,7 @@ $('lbBtn').onclick=()=>openLB('',null);
 $('lbTop').onclick=()=>openLB('',null);
 $('viewLbBtn').onclick=()=>openLB('',null);
 $('lbClose').onclick=()=>$('lbOv').classList.add('hidden');
-$('submitScore').onclick=()=>{const n=$('lbName').value.trim();if(!n){$('lbName').focus();return;}lbAdd({name:n,w:S._wins,date:todayKey(),mode:S.mode});$('submitScore').textContent='Submitted ✓';$('submitScore').disabled=true;$('lbName').disabled=true;openLB('Nice - you are on the board!',n);};
+$('submitScore').onclick=async()=>{const n=$('lbName').value.trim();if(!n){$('lbName').focus();return;}$('submitScore').disabled=true;$('submitScore').textContent='Submitting…';await lbAdd(n,S._wins);$('submitScore').textContent='Submitted ✓';$('lbName').disabled=true;openLB('Nice - you are on the global board!',n);};
 $('bestLine').innerHTML=bestStr();introLb();
 renderCourt();updateProj();
 start();
