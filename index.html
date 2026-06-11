@@ -1555,7 +1555,7 @@ html,body{overflow-x:hidden;max-width:100%}
 <body>
 <div class="bar">
   <div class="l"><div class="logo">RC</div><div class="round">Round <b id="roundLbl">1</b>/5</div></div>
-  <div class="r"><span class="poweredby">POWERED BY <span class="swm"></span></span><span class="ver" style="opacity:.45;font-weight:800">v40</span>
+  <div class="r"><span class="poweredby">POWERED BY <span class="swm"></span></span><span class="ver" style="opacity:.45;font-weight:800">v41</span>
     <button class="ico lbtop" id="lbTop" title="Leaderboard">🏆<span class="lbword"> Board</span></button>
     <button class="ico" id="statsBtn" title="Your stats">📊</button>
     <button class="ico" id="restartBtn" title="Restart">↻</button>
@@ -1683,7 +1683,7 @@ html,body{overflow-x:hidden;max-width:100%}
 
 <script>
 const DATA=(window.RC_DATA||[]).concat(window.RC_DATA_HISTORICAL||[]);
-const ANALYTICS_URL=""; // set to your Cloudflare worker URL (see analytics/README) to enable traffic analytics
+const ANALYTICS_URL="https://ringchaser-stats.jordan-237.workers.dev"; // Cloudflare analytics worker
 function track(e){if(!ANALYTICS_URL)return;try{const u=ANALYTICS_URL.replace(/\/$/,'')+'/t?e='+e;if(navigator.sendBeacon)navigator.sendBeacon(u);else fetch(u,{mode:'no-cors',cache:'no-store'});}catch(_){}}
 try{if(!sessionStorage.getItem('rc_ts')){sessionStorage.setItem('rc_ts','1');track('s');}}catch(_){track('s');}
 const SLOTS=[{pos:'PG',need:'G',x:50,y:74},{pos:'SG',need:'G',x:82,y:50},{pos:'SF',need:'F',x:18,y:50},{pos:'PF',need:'F',x:64,y:24},{pos:'C',need:'C',x:36,y:24}];
