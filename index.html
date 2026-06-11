@@ -1396,6 +1396,8 @@ window.RC_DATA = [
 }
 *{box-sizing:border-box;margin:0}
 body{background:var(--bg);color:var(--text);font-family:var(--f0);-webkit-font-smoothing:antialiased}
+html,body{overflow-x:hidden;max-width:100%}
+@media(max-width:600px){.poweredby{display:none}.lbword{display:none}.lbtop{width:40px;padding:0;font-size:18px}.appbar{padding:12px 12px}.wrap{padding:6px 12px 40px}.bar .r{gap:8px}}
 .bar{display:flex;align-items:center;justify-content:space-between;max-width:1240px;margin:0 auto;padding:16px 20px}
 .bar .l{display:flex;align-items:center;gap:14px}
 .logo{width:42px;height:42px;border-radius:12px;background:var(--brand);color:var(--on);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:15px}
@@ -1465,7 +1467,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--f0);-webkit-font-s
 .tab{background:var(--panel);border:1px solid var(--line);color:var(--dim);font-weight:800;border-radius:var(--pill);padding:8px 16px;cursor:pointer}
 .tab.on{background:var(--brand);color:var(--on);border-color:var(--brand)}
 .filters input{flex:1;min-width:120px;background:var(--panel);border:1px solid var(--line);color:var(--text);border-radius:var(--pill);padding:10px 16px;font-size:16px;font-family:var(--f0)}
-.filters select{background:var(--panel);border:1px solid var(--line);color:var(--text);border-radius:var(--pill);padding:10px 14px;font-weight:800;cursor:pointer}
+.filters select{background:var(--panel);border:1px solid var(--line);color:var(--text);border-radius:var(--pill);padding:10px 14px;font-weight:800;cursor:pointer;font-size:16px}
 .avail{color:var(--brand);font-weight:800;font-size:13px;margin-bottom:8px}
 .note{background:rgba(244,162,59,.1);border:1px solid rgba(244,162,59,.4);color:var(--orange);border-radius:12px;padding:12px 14px;font-weight:700;font-size:13px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;gap:10px}
 
@@ -1497,6 +1499,16 @@ body{background:var(--bg);color:var(--text);font-family:var(--f0);-webkit-font-s
 .projstrip .pv small{font-size:16px;color:var(--dim);font-weight:800}
 .projstrip .pl{font-size:11px;text-transform:uppercase;letter-spacing:.5px}
 #newBest{text-align:center;color:var(--on);background:var(--brand);font-weight:900;border-radius:999px;padding:6px 16px;width:max-content;margin:10px auto 0;font-size:14px;box-shadow:0 0 18px rgba(52,245,197,.5)}
+.stiles{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:10px 0 6px}
+.stile{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 4px;text-align:center}
+.stile .sv{font-weight:900;font-size:19px;color:var(--brand)}
+.stile .sl{font-size:9px;color:var(--dim);font-weight:800;text-transform:uppercase;margin-top:3px}
+.ssec{text-align:left;font-weight:800;color:var(--dim);font-size:11px;text-transform:uppercase;letter-spacing:.5px;margin:16px 0 8px}
+.sbar{display:grid;grid-template-columns:96px 1fr 26px;gap:8px;align-items:center;margin-bottom:6px}
+.sbar .sk{font-weight:900}.sbar .snm{font-weight:700;font-size:13px;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.strack{height:10px;background:var(--bg);border-radius:6px;overflow:hidden}
+.sfill{display:block;height:100%;background:var(--brand);border-radius:6px}
+.sbar .sn{font-weight:800;font-size:12px;text-align:right;color:var(--dim)}
 .zone{position:absolute;left:0;right:0;text-align:center;color:#22305c;font-weight:900;font-size:12px;letter-spacing:3px}
 .zone.t{top:14px}.zone.b{bottom:14px}
 .slot{position:absolute;transform:translate(-50%,-50%);width:108px;min-height:54px;border-radius:14px;border:2px dashed #283561;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:8px}
@@ -1543,8 +1555,9 @@ body{background:var(--bg);color:var(--text);font-family:var(--f0);-webkit-font-s
 <body>
 <div class="bar">
   <div class="l"><div class="logo">RC</div><div class="round">Round <b id="roundLbl">1</b>/5</div></div>
-  <div class="r"><span class="poweredby">POWERED BY <span class="swm"></span></span><span class="ver" style="opacity:.45;font-weight:800">v37</span>
-    <button class="ico lbtop" id="lbTop" title="Leaderboard">🏆 Board</button>
+  <div class="r"><span class="poweredby">POWERED BY <span class="swm"></span></span><span class="ver" style="opacity:.45;font-weight:800">v40</span>
+    <button class="ico lbtop" id="lbTop" title="Leaderboard">🏆<span class="lbword"> Board</span></button>
+    <button class="ico" id="statsBtn" title="Your stats">📊</button>
     <button class="ico" id="restartBtn" title="Restart">↻</button>
     <button class="ico" id="helpBtn" title="How to play">?</button>
   </div>
@@ -1658,6 +1671,8 @@ body{background:var(--bg);color:var(--text);font-family:var(--f0);-webkit-font-s
   <div class="modes"><button class="btn primary" id="howClose">Got it</button></div>
 </div></div>
 
+<div class="ov hidden" id="statsOv"><div class="box" style="max-width:540px"><h1>📊 Your <span>Stats</span></h1><div id="statsBody"></div><div class="modes"><button class="btn primary" id="statsClose">Close</button></div></div></div>
+
 <div class="ov hidden" id="lbOv"><div class="box">
   <h1>🏆 <span>Leaderboard</span></h1>
   <div id="lbMsg" class="csub" style="margin:0 0 12px"></div>
@@ -1668,6 +1683,9 @@ body{background:var(--bg);color:var(--text);font-family:var(--f0);-webkit-font-s
 
 <script>
 const DATA=(window.RC_DATA||[]).concat(window.RC_DATA_HISTORICAL||[]);
+const ANALYTICS_URL=""; // set to your Cloudflare worker URL (see analytics/README) to enable traffic analytics
+function track(e){if(!ANALYTICS_URL)return;try{const u=ANALYTICS_URL.replace(/\/$/,'')+'/t?e='+e;if(navigator.sendBeacon)navigator.sendBeacon(u);else fetch(u,{mode:'no-cors',cache:'no-store'});}catch(_){}}
+try{if(!sessionStorage.getItem('rc_ts')){sessionStorage.setItem('rc_ts','1');track('s');}}catch(_){track('s');}
 const SLOTS=[{pos:'PG',need:'G',x:50,y:74},{pos:'SG',need:'G',x:82,y:50},{pos:'SF',need:'F',x:18,y:50},{pos:'PF',need:'F',x:64,y:24},{pos:'C',need:'C',x:36,y:24}];
 const $=id=>document.getElementById(id);
 const seasonStr=y=>(y-1)+'–'+y;
@@ -1820,11 +1838,23 @@ function finish(){
     <div class="st">${p.ppg.toFixed(1)}</div><div class="st">${p.rpg.toFixed(1)}</div><div class="st p">${ovr(p)}</div></div>`).join('');
   $('draftView').classList.add('hidden');$('preRoll').classList.add('hidden');$('resultView').classList.remove('hidden');
   try{const b=+(localStorage.getItem('rc_best')||0);$('newBest').classList.toggle('hidden',!(w>b));if(w>b)localStorage.setItem('rc_best',w);}catch(e){}
+  try{const H=JSON.parse(localStorage.getItem('rc_hist')||'[]');H.push({w:w,g:g,o:Math.round(avgOvrVal),p:ps.map(x=>x.name),t:ps.map(x=>x._team)});localStorage.setItem('rc_hist',JSON.stringify(H.slice(-1000)));}catch(e){}
+  track('r');try{if(!sessionStorage.getItem('rc_td')){sessionStorage.setItem('rc_td','1');track('d');}}catch(_){track('d');}
   S._share=`🏀 RingChaser — my all-time five went ${w}-${l} (${g})\n${ps.map(p=>p.name).join(', ')}\nringchaser.sleeper.com`;
   S._wins=w;
   $('lbName').disabled=false;$('submitScore').disabled=false;$('submitScore').textContent='Submit';
 }
 function bestStr(){try{const b=+(localStorage.getItem('rc_best')||0);return b?`Your best: <b style="color:var(--brand)">${b}-${82-b}</b>`:'';}catch(e){return'';}}
+function openStats(){let H=[];try{H=JSON.parse(localStorage.getItem('rc_hist')||'[]');}catch(e){}const el=$('statsBody');const n=H.length;
+ if(!n){el.innerHTML='<div class="csub" style="padding:20px">No games yet \u2014 play a few and your stats show up here.</div>';$('statsOv').classList.remove('hidden');return;}
+ const avgW=Math.round(H.reduce((a,x)=>a+x.w,0)/n);const best=Math.max.apply(null,H.map(x=>x.w));const sCount=H.filter(x=>x.g==='S').length;
+ const gc={S:0,A:0,B:0,C:0,D:0,F:0};H.forEach(x=>{gc[x.g]=(gc[x.g]||0)+1;});const gcol={S:'#34F5C5',A:'#34F5C5',B:'#7C5CFF',C:'#F4A23B',D:'#F4A23B',F:'#FF5C7A'};const gmax=Math.max.apply(null,Object.values(gc).concat([1]));
+ const pc={},tc={};H.forEach(x=>{(x.p||[]).forEach(nm=>pc[nm]=(pc[nm]||0)+1);(x.t||[]).forEach(tm=>tc[tm]=(tc[tm]||0)+1);});const top=o=>Object.entries(o).sort((a,b)=>b[1]-a[1]).slice(0,8);
+ const tiles='<div class="stiles">'+[['Games',n],['Avg',avgW+'-'+(82-avgW)],['Best',best+'-'+(82-best)],['S Teams',sCount]].map(t=>'<div class="stile"><div class="sv">'+t[1]+'</div><div class="sl">'+t[0]+'</div></div>').join('')+'</div>';
+ const grades='<div class="ssec">Grade distribution</div>'+['S','A','B','C','D','F'].map(k=>'<div class="sbar"><span class="sk" style="color:'+gcol[k]+'">'+k+'</span><span class="strack"><span class="sfill" style="width:'+Math.round(100*gc[k]/gmax)+'%;background:'+gcol[k]+'"></span></span><span class="sn">'+gc[k]+'</span></div>').join('');
+ const tp=top(pc),pmax=tp.length?tp[0][1]:1;const players='<div class="ssec">Most-drafted players</div>'+tp.map(e=>'<div class="sbar"><span class="snm">'+e[0]+'</span><span class="strack"><span class="sfill" style="width:'+Math.round(100*e[1]/pmax)+'%"></span></span><span class="sn">'+e[1]+'</span></div>').join('');
+ const tt=top(tc),tmax2=tt.length?tt[0][1]:1;const teams='<div class="ssec">Most-drafted teams</div>'+tt.map(e=>'<div class="sbar"><span class="snm">'+e[0]+'</span><span class="strack"><span class="sfill" style="width:'+Math.round(100*e[1]/tmax2)+'%;background:var(--orange)"></span></span><span class="sn">'+e[1]+'</span></div>').join('');
+ el.innerHTML=tiles+grades+players+teams;$('statsOv').classList.remove('hidden');}
 function introLb(){const a=lbGet();if(!a.length){$('introLb').innerHTML='<div class="csub" style="font-size:12px;margin:0">🏆 No scores yet — play and submit to start the board.</div>';return;}$('introLb').innerHTML='<div class="csub" style="margin:0 0 8px;color:var(--brand);font-weight:800">🏆 Top Scores</div>'+a.slice(0,5).map((e,i)=>'<div class="rrow" style="grid-template-columns:26px 1fr auto;padding:9px 12px;margin-bottom:5px"><div class="st p">'+(i+1)+'</div><div class="who"><div class="n" style="font-size:14px">'+e.name+'</div></div><div class="st p">'+e.w+'-'+(82-e.w)+'</div></div>').join('');}
 
 const LEADERBOARD_API=""; // set to a backend URL to make the leaderboard global
@@ -1859,6 +1889,8 @@ $('search').oninput=e=>{S.query=e.target.value;renderList();};
 $('sortSel').onchange=e=>{S.sort=e.target.value;document.querySelectorAll('.head .st').forEach(x=>x.classList.toggle('on',x.dataset.s===S.sort));renderList();};
 document.querySelectorAll('.head .st').forEach(h=>h.onclick=()=>{S.sort=h.dataset.s;$('sortSel').value=h.dataset.s;document.querySelectorAll('.head .st').forEach(x=>x.classList.toggle('on',x===h));renderList();});
 $('helpBtn').onclick=()=>$('howOv').classList.remove('hidden');
+$('statsBtn').onclick=openStats;
+$('statsClose').onclick=()=>$('statsOv').classList.add('hidden');
 $('howClose').onclick=()=>$('howOv').classList.add('hidden');
 $('lbBtn').onclick=()=>openLB('',null);
 $('lbTop').onclick=()=>openLB('',null);
